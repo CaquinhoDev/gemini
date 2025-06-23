@@ -17,7 +17,7 @@ async function startBot() {
     auth: state,
     printQRInTerminal: false,
     logger: pino({ level: "silent" }),
-    browser: ["CaquinhoDev", "Chrome (Linux)", "Safari"],
+    browser: ["Safari", "CaquinhoDev", ""],
   });
 
   sock.ev.on("creds.update", saveCreds);
