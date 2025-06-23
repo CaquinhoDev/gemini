@@ -16,7 +16,7 @@ Se for uma pergunta filosófica, incentive a reflexão.
 Caso alguém peça conselhos, responda como um bom amigo.  
 Se perguntarem sobre você, se apresente como "Jarvis, um assistente virtual treinado para ajudar em qualquer situação!".  
 Responda sempre de maneira envolvente e instigante! ✨
-Ignore o @5511944834380 da mensagem.
+Ignore o @[numero] da mensagem.
 Use apenas um * para o negrito ficar no formato correto do whatsapp.
 agora responda a essa pergunta:"${query}"`,
           },
@@ -27,7 +27,7 @@ agora responda a essa pergunta:"${query}"`,
 
   let config = {
     method: "post",
-    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI}`,
+    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI}`,
     headers: {
       "Content-Type": "application/json",
     },

@@ -70,29 +70,49 @@ async function handleMessage({ messages }, sock) {
   const text =
     msg.message.conversation || msg.message.extendedTextMessage?.text;
 
-  // Verifica se a mensagem é do grupo e se o bot foi mencionado
   const isMentioned =
     msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(
       botNumber
     );
 
-  // Verifica se o usuário respondeu a uma mensagem do bot
   const isReplyToBot =
     msg.message?.extendedTextMessage?.contextInfo?.quotedMessage &&
     msg.message.extendedTextMessage.contextInfo.participant === botNumber;
 
-  // Se for grupo e o bot não for mencionado nem respondido, ignora a mensagem
   if (isGroup && !isMentioned && !isReplyToBot) return;
 
-  if (text) {
+  const quotedMessage =
+    msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+
+  let quotedText = "";
+  if (quotedMessage) {
+    quotedText =
+      quotedMessage.conversation ||
+      quotedMessage.extendedTextMessage?.text ||
+      quotedMessage?.text ||
+      "";
+  }
+
+  if (text || quotedText) {
     await digitarMensagem(msg, sock);
+
     try {
-      const response = await getGeminiResponse(text);
-      // Resposta sem marcar ninguém
+      let promptFinal = "";
+
+      if (quotedText && text) {
+        promptFinal = `Mensagem original: "${quotedText}"\n\nPedido do usuário: "${text}"`;
+      } else if (quotedText) {
+        promptFinal = quotedText;
+      } else {
+        promptFinal = text;
+      }
+
+      const response = await getGeminiResponse(promptFinal);
+
       await sock.sendMessage(
         from,
         {
-          text: response, // Resposta simples
+          text: response,
         },
         { quoted: msg }
       );
